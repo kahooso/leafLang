@@ -1,0 +1,15 @@
+---
+
+server:
+  port: 5500
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/leaf-lang-db
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
