@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile | leafLang</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+</head>
+
+<body class="profile-page">
+    <!-- Decorative leaves -->
+    <div class="leaf-decoration leaf-1"></div>
+    <div class="leaf-decoration leaf-2"></div>
+    <div class="leaf-decoration leaf-3"></div>
+
+    <div class="profile-header">
+        <div class="user-info">
+            <h2><i class="fas fa-leaf"></i> Your Language Profile</h2>
+            <p>Manage your learning progress and settings</p>
+        </div>
+        <div class="role-badge">
+            <span>{{ .role.Name }}</span>
+            <i class="fas fa-user-graduate"></i>
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-image-section">
+                {{ if .image }}
+                <img src="{{ .image }}" alt="Profile Image" class="profile-image">
+                {{ else }}
+                <div class="profile-image-placeholder">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                {{ end }}
+                <div class="learning-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Day streak: <strong>7</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Total time: <strong>12h 45m</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-star"></i>
+                        <span>Level: <strong>Beginner</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <form enctype="multipart/form-data" id="ProfileUpdateForm" class="profile-form">
+                <h3 class="section-title"><i class="fas fa-user-edit"></i> Profile Settings</h3>
+
+                <div class="input-group">
+                    <i class="fas fa-camera input-icon"></i>
+                    <input type="file" id="ProfileImage" name="image" accept="image/*" class="file-input">
+                    <label for="ProfileImage" class="file-label">Choose profile image</label>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="Email" name="email" value="{{ .email }}" placeholder="Your Email" readonly>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-mobile-alt input-icon"></i>
+                    <input type="tel" id="Phone" name="phone" value="{{ .phone }}" placeholder="Your Phone">
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="FirstName" name="firstName" value="{{ .firstName }}" placeholder="First Name"
+                        readonly>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-user-tag input-icon"></i>
+                    <input type="text" id="LastName" name="lastName" value="{{ .lastName }}" placeholder="Last Name"
+                        readonly>
+                </div>
+
+                <div class="input-group select-group">
+                    <i class="fas fa-bullseye input-icon"></i>
+                    <select id="LearningGoal" name="learningGoal">
+                        <option value="5">5 words/day</option>
+                        <option value="10" selected>10 words/day</option>
+                        <option value="15">15 words/day</option>
+                        <option value="20">20 words/day</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="update-button">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+
+        <div class="profile-actions">
+            <a href="/main" class="profile-action-button">
+                <i class="fas fa-home"></i> Back to Main
+            </a>
+            <a href="/logout" class="profile-action-button logout">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileUpdateForm = document.getElementById("ProfileUpdateForm");
+            const userId = "{{ .id }}";
+
+            // Update file input label when file is selected
+            const fileInput = document.getElementById('ProfileImage');
+            const fileLabel = document.querySelector('.file-label');
+
+            fileInput.addEventListener('change', function () {
+                if (this.files && this.files.length > 0) {
+                    fileLabel.textContent = this.files[0].name;
+                } else {
+                    fileLabel.textContent = 'Choose profile image';
+                }
+            });
+
+            profileUpdateForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const phone = document.getElementById("Phone").value.trim();
+                const learningGoal = document.getElementById("LearningGoal").value;
+                const profileImage = document.getElementById("ProfileImage").files[0];
+
+                const formData = new FormData();
+                formData.append("phone", phone);
+                formData.append("learningGoal", learningGoal);
+                if (profileImage) {
+                    formData.append("image", profileImage);
+                }
+
+                try {
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        throw new Error("Authentication required");
+                    }
+
+                    const response = await fetch(`/profile/update/${userId}`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || "Profile update failed");
+                    }
+
+                    alert("Profile updated successfully!");
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Update error:", error);
+                    alert(error.message);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

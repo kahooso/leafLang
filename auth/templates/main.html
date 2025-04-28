@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>leafLang - Language Learning</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/favicon.png">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="main-page">
+    <!-- Decorative leaves -->
+    <div class="leaf-decoration leaf-1"></div>
+    <div class="leaf-decoration leaf-2"></div>
+    <div class="leaf-decoration leaf-3"></div>
+
+    <div class="header">
+        <div class="profile-header">
+            <div class="user-info">
+                <h2><i class="fas fa-leaf"></i> leafLang</h2>
+                <p>Welcome back, <span class="username">{{.username}}</span>!</p>
+            </div>
+            <div class="profile-badge">
+                <a href="/profile" class="profile-link">
+                    <i class="fas fa-user"></i> Profile
+                    <span class="role-badge">{{ .role }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-dashboard">
+        <div class="progress-card to-learn">
+            <i class="fas fa-seedling"></i>
+            <div class="progress-info">
+                <h3>To Learn</h3>
+                <span class="count">{{ .toLearnCount }}</span>
+                <p>Ready for practice</p>
+            </div>
+        </div>
+
+        <div class="progress-card known">
+            <i class="fas fa-leaf"></i>
+            <div class="progress-info">
+                <h3>Known</h3>
+                <span class="count">{{ .knownCount }}</span>
+                <p>In short-term memory</p>
+            </div>
+        </div>
+
+        <div class="progress-card learned">
+            <i class="fas fa-tree"></i>
+            <div class="progress-info">
+                <h3>Learned</h3>
+                <span class="count">{{ .learnedCount }}</span>
+                <p>In long-term memory</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-actions">
+        <a href="/practice" class="action-card practice">
+            <i class="fas fa-book-open"></i>
+            <h3>Practice Now</h3>
+            <p>{{ .toLearnCount }} words ready for review</p>
+        </a>
+
+        <a href="/words" class="action-card add-words">
+            <i class="fas fa-plus-circle"></i>
+            <h3>Add New Words</h3>
+            <p>Expand your vocabulary</p>
+        </a>
+
+        <a href="/wordlist" class="action-card word-list">
+            <i class="fas fa-list-ul"></i>
+            <h3>My Word List</h3>
+            <p>Manage your collection</p>
+        </a>
+
+        <a href="/statistics" class="action-card stats">
+            <i class="fas fa-chart-line"></i>
+            <h3>Statistics</h3>
+            <p>Track your progress</p>
+        </a>
+    </div>
+
+    <div class="secondary-actions">
+        <a href="/contact" class="secondary-button"><i class="fas fa-envelope"></i> Contact</a>
+        <a href="/faq" class="secondary-button"><i class="fas fa-question-circle"></i> FAQ</a>
+        <a href="/settings" class="secondary-button"><i class="fas fa-cog"></i> Settings</a>
+        <a href="/logout" class="secondary-button logout"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+    </div>
+
+    <div class="daily-motivation">
+        <h3><i class="fas fa-quote-left"></i> Today's Language Tip</h3>
+        <p>"Learning 10 words a day means 3,650 words a year - enough to understand 85% of a language!"</p>
+    </div>
+</body>
+
+</html>

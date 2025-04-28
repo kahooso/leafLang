@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Premium Banking</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+</head>
+
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+            <p>Join our premium banking service</p>
+        </div>
+
+        <form id="SignUpForm" action="/auth/signup" method="post" class="auth-form">
+            <div class="input-group">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="SignUpUsername" placeholder="Your Username" required>
+            </div>
+
+            <!-- <div class="input-group">
+                <i class="fas fa-image input-icon"></i>
+                <input type="file" id="SignInImage" name="image" accept="image/*">
+            </div> -->
+
+            <div class="input-group">
+                <i class="fa-solid fa-signature input-icon"></i>
+                <input type="text" id="SignUpFirstName" placeholder="Your first name" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-signature input-icon"></i>
+                <input type="text" id="SignUpLastName" placeholder="Your last name" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="SignUpEmail" name="email" placeholder="Your Email" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-phone input-icon"></i>
+                <input type="phone" id="SignUpPhone" placeholder="Your phone" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="SignUpPassword" placeholder="Create Password" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="SignUpConfirmPassword" placeholder="Confirm Password" required>
+            </div>
+
+            <button type="submit" class="auth-button">
+                <i class="fas fa-user-plus"></i> Sign Up
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/signin" class="text-link"><i class="fas fa-sign-in-alt"></i> Sign
+                    In</a></p>
+            <p id="SignUpMsg"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const signUpForm = document.getElementById("SignUpForm");
+            if (signUpForm) {
+                signUpForm.addEventListener("submit", async function (event) {
+                    event.preventDefault();
+
+                    const email = document.getElementById("SignUpEmail").value;
+                    const phone = document.getElementById("SignUpPhone").value;
+                    const firstName = document.getElementById("SignUpFirstName").value;
+                    const lastName = document.getElementById("SignUpLastName").value;
+                    const password = document.getElementById("SignUpPassword").value;
+                    const confirmPassword = document.getElementById("SignUpConfirmPassword").value
+                    const message = document.getElementById("SignUpMsg");
+
+                    if (password !== confirmPassword) {
+                        message.style.color = "red";
+                        message.textContent = "Password don't match!"
+                        return;
+                    }
+
+                    const response = await fetch("api/auth/signup", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, phone, firstName, lastName, password }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        message.textContent = "Registration successful! Redirecting...";
+                        setTimeout(() => {
+                            window.location.href = "/signin";
+                        }, 3000);
+
+                    } else {
+                        message.style.color = "red";
+                        message.textContent = data.error || "Registration failed!";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

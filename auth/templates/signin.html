@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | leafLang</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+</head>
+
+<body class="auth-page">
+    <!-- Decorative leaves -->
+    <div class="leaf-decoration leaf-1"></div>
+    <div class="leaf-decoration leaf-2"></div>
+    <div class="leaf-decoration leaf-3"></div>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2><i class="fas fa-leaf"></i> Welcome to leafLang</h2>
+            <p>Please sign in to continue your language journey</p>
+        </div>
+
+        <form id="SignInForm" action="/auth/signin" method="post" class="auth-form">
+            <div class="input-group">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="SignInEmail" placeholder="Your Email" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="SignInPassword" placeholder="Your Password" required>
+            </div>
+
+            <button type="submit" class="auth-button">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>New to leafLang? <a href="/signup" class="text-link"><i class="fas fa-user-plus"></i> Create account</a>
+            </p>
+            <p id="SignInMsg"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const signInForm = document.getElementById("SignInForm");
+            if (signInForm) {
+                signInForm.addEventListener("submit", async function (event) {
+                    event.preventDefault();
+
+                    const email = document.getElementById("SignInEmail").value;
+                    const password = document.getElementById("SignInPassword").value;
+                    const message = document.getElementById("SignInMsg");
+
+                    const response = await fetch("api/auth/signin", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem("token", data.token);
+                        localStorage.setItem("role", data.role);
+
+                        message.style.color = "var(--success-color)";
+                        message.textContent = "Login successful! Redirecting...";
+                        setTimeout(() => {
+                            window.location.href = "/main";
+                        }, 1500);
+                    } else {
+                        message.style.color = "var(--error-color)";
+                        message.textContent = data.error || "Invalid email or password!";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
