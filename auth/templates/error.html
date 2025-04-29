@@ -22,7 +22,7 @@
         <h1>{{.StatusCode}} <span>{{.StatusText}}</span></h1>
 
         <div class="error-message">
-            <p>{{.Message}}</p>
+            <!-- <p>{{.Message}}</p> -->
             {{if eq .StatusCode 401}}
             <a href="/signin" class="error-button">Sign In</a>
             {{end}}

@@ -24,7 +24,7 @@ type UpdateProfileRequest struct {
 func ProfileHandler(c *gin.Context) {
 	userRaw, exists := c.Get("user")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизирован!"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorized!"})
 		return
 	}
 
@@ -55,7 +55,7 @@ func ProfileHandler(c *gin.Context) {
 func UpdateProfileHandler(c *gin.Context) {
 	userRaw, exists := c.Get("user")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизирован!"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не Authorized!"})
 		return
 	}
 
@@ -63,22 +63,20 @@ func UpdateProfileHandler(c *gin.Context) {
 
 	var req UpdateProfileRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный ввод"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect input"})
 		return
 	}
 
 	var user models.User
 	if err := database.DB.Where("id = ?", userCtx.ID).First(&user).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Пользователь не найден"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "User is not found"})
 		return
 	}
 
-	// Обновляем телефон
 	if req.Phone != "" {
 		user.Phone = req.Phone
 	}
 
-	// Если загружена новая картинка
 	if req.Image != nil {
 		if !strings.HasPrefix(req.Image.Header.Get("Content-Type"), "image/") {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Можно загружать только изображения"})
@@ -102,7 +100,6 @@ func UpdateProfileHandler(c *gin.Context) {
 			return
 		}
 
-		// Удаляем старую картинку, если была
 		if user.ImageUrl != "" {
 			oldImage := strings.TrimPrefix(user.ImageUrl, "/static/user-images/")
 			if err := os.Remove(filepath.Join(imageDir, oldImage)); err != nil {
@@ -119,7 +116,7 @@ func UpdateProfileHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":  "Профиль успешно обновлен",
+		"message":  "Profile is updated",
 		"imageUrl": user.ImageUrl,
 		"phone":    user.Phone,
 	})

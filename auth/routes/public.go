@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"auth/handlers"
 	"auth/middleware"
 	"net/http"
 
@@ -13,7 +12,9 @@ func RegisterPublicRoutes(r *gin.Engine) {
 	r.LoadHTMLGlob("templates/*")
 
 	r.Use(middleware.ErrorMiddleware())
-	r.NoRoute(handlers.NotFoundHandler)
+	r.NoRoute(func(c *gin.Context) {
+		c.AbortWithStatus(http.StatusNotFound)
+	})
 
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(302, "/signin")

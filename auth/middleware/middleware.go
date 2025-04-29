@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"auth/context"
+	"auth/handlers"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,8 +16,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		tokenString, err := c.Cookie("token")
 		if err != nil {
 			log.Println("Ошибка получения токена из cookies:", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен не предоставлен"})
-			c.Abort()
+			handlers.ErrorResponseHandle(c, http.StatusUnauthorized, "Токен не предоставлен")
 			return
 		}
 		fmt.Printf("token: %v\n", tokenString)
@@ -32,29 +32,25 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 
 		if err != nil {
 			log.Println("Ошибка при парсинге токена:", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный токен"})
-			c.Abort()
+			handlers.ErrorResponseHandle(c, http.StatusUnauthorized, "Неверный токен")
 			return
 		}
 
 		if !token.Valid {
 			log.Println("Токен невалиден:", tokenString)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный токен"})
-			c.Abort()
+			handlers.ErrorResponseHandle(c, http.StatusUnauthorized, "Неверный токен")
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Ошибка обработки токена"})
-			c.Abort()
+			handlers.ErrorResponseHandle(c, http.StatusUnauthorized, "Ошибка обработки токена")
 			return
 		}
 
 		userID, ok := claims["user_id"].(float64)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат user_id"})
-			c.Abort()
+			handlers.ErrorResponseHandle(c, http.StatusUnauthorized, "Неверный формат user_id")
 			return
 		}
 

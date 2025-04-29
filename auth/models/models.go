@@ -6,6 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	StatusToLearn = 1
+	StatusToKnow  = 2
+	StatusLearned = 3
+)
+
 type User struct {
 	ID         uint      `gorm:"primaryKey"`
 	Email      string    `gorm:"unique;not null"`
@@ -48,13 +54,16 @@ func (WordStatus) TableName() string {
 type UserWord struct {
 	ID           uint       `gorm:"primaryKey"`
 	UserID       uint       `gorm:"not null"`
-	User         User       `gorm:"foreignKey:UserID"`
-	OriginalWord string     `gorm:"not null"`
-	Translation  string     `gorm:"not null"`
-	StatusID     uint       `gorm:"not null"`
+	User         User       `gorm:"foreignKey:UserID;constraint:onDelete:CASCADE"`
+	OriginalWord string     `gorm:"not null;size:100;index"`
+	Translation  string     `gorm:"not null;size:100"`
+	Example      string     `gorm:"size:500"`
+	StatusID     uint       `gorm:"not null;index"`
 	Status       WordStatus `gorm:"foreignKey:StatusID"`
 	SuccessCount int        `gorm:"default:0"`
-	LastReviewed *time.Time
+	FailCount    int        `gorm:"default:0"`
+	LastReviewed time.Time
+	NextReviewAt time.Time `gorm:"inde"`
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index"`

@@ -1,43 +1,62 @@
 package handlers
 
 import (
-	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	ErrUnauthorized = errors.New("unauthorized")
-	ErrForbidden    = errors.New("forbidden")
-	ErrNotFound     = errors.New("not found")
-)
+func ErrorResponseHandle(c *gin.Context, status int, customMessage string) {
+	defaultMessages := map[int]string{
+		http.StatusBadRequest:          "Bad request",
+		http.StatusUnauthorized:        "Unauthorized",
+		http.StatusForbidden:           "Access denied",
+		http.StatusNotFound:            "Page is not found",
+		http.StatusInternalServerError: "Internal server error",
+	}
 
-func ErrorHandler(c *gin.Context, status int, message string) {
-	c.HTML(status, "error.html", gin.H{
-		"StatusCode": status,
-		"StatusText": http.StatusText(status),
-		"Message":    message,
-	})
+	isAPIRequest := strings.Contains(c.GetHeader("Accept"), "application/json") ||
+		strings.HasPrefix(c.Request.URL.Path, "/api/")
+
+	message := customMessage
+	if message == "" {
+		message = defaultMessages[status]
+	}
+
+	if isAPIRequest {
+		c.JSON(status, gin.H{
+			"error":   http.StatusText(status),
+			"message": message,
+		})
+	} else {
+		c.HTML(status, "error.html", gin.H{
+			"StatusCode": status,
+			"StatusText": http.StatusText(status),
+			"Message":    message,
+		})
+	}
+
 	c.Abort()
 }
 
-func UnauthorizedHandler(c *gin.Context) {
-	ErrorHandler(c, http.StatusUnauthorized, "Please log in to access this page")
+func AbortWithError(c *gin.Context, status int, message string) {
+	c.Status(status)
+	ErrorResponseHandle(c, status, message)
 }
 
-func NotFoundHandler(c *gin.Context) {
-	ErrorHandler(c, http.StatusNotFound, "The page you're looking for doesn't exist")
+func AbortUnauthorized(c *gin.Context) {
+	AbortWithError(c, http.StatusUnauthorized, "")
 }
 
-func InternalServerErrorHandler(c *gin.Context) {
-	ErrorHandler(c, http.StatusInternalServerError, "Something went wrong on our end. We're working to fix it!")
+func AbortForbidden(c *gin.Context) {
+	AbortWithError(c, http.StatusForbidden, "")
 }
 
-func ForbiddenHandler(c *gin.Context) {
-	ErrorHandler(c, http.StatusForbidden, "You don't have permission to access this resource")
+func AbortNotFound(c *gin.Context) {
+	AbortWithError(c, http.StatusNotFound, "")
 }
 
-func BadRequestHandler(c *gin.Context, message string) {
-	ErrorHandler(c, http.StatusBadRequest, message)
+func AbortInternalError(c *gin.Context) {
+	AbortWithError(c, http.StatusInternalServerError, "")
 }
