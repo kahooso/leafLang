@@ -11,11 +11,6 @@
 </head>
 
 <body class="profile-page">
-    <!-- Decorative leaves -->
-    <div class="leaf-decoration leaf-1"></div>
-    <div class="leaf-decoration leaf-2"></div>
-    <div class="leaf-decoration leaf-3"></div>
-
     <div class="profile-header">
         <div class="user-info">
             <h2><i class="fas fa-leaf"></i> Your Language Profile</h2>
@@ -114,8 +109,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             const profileUpdateForm = document.getElementById("ProfileUpdateForm");
             const userId = "{{ .id }}";
-
-            // Update file input label when file is selected
             const fileInput = document.getElementById('ProfileImage');
             const fileLabel = document.querySelector('.file-label');
 

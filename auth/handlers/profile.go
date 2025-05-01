@@ -79,14 +79,14 @@ func UpdateProfileHandler(c *gin.Context) {
 
 	if req.Image != nil {
 		if !strings.HasPrefix(req.Image.Header.Get("Content-Type"), "image/") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Можно загружать только изображения"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "JPEG | PNG input only"})
 			return
 		}
 
 		imageDir := "./static/user-images"
 		if err := os.MkdirAll(imageDir, 0755); err != nil {
 			log.Printf("Ошибка создания папки: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка сервера"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			return
 		}
 
@@ -96,14 +96,14 @@ func UpdateProfileHandler(c *gin.Context) {
 
 		if err := c.SaveUploadedFile(req.Image, imagePath); err != nil {
 			log.Printf("Ошибка сохранения изображения: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка сохранения изображения"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving image"})
 			return
 		}
 
 		if user.ImageUrl != "" {
 			oldImage := strings.TrimPrefix(user.ImageUrl, "/static/user-images/")
 			if err := os.Remove(filepath.Join(imageDir, oldImage)); err != nil {
-				log.Printf("Ошибка удаления старого изображения: %v", err)
+				log.Printf("Error deleting older image: %v", err)
 			}
 		}
 
@@ -111,7 +111,7 @@ func UpdateProfileHandler(c *gin.Context) {
 	}
 
 	if err := database.DB.Save(&user).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка сохранения профиля"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving profile changes"})
 		return
 	}
 

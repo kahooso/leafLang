@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
+	"text/template"
 
 	database "auth/db"
 	"auth/routes"
@@ -21,6 +23,10 @@ func main() {
 	database.ConnectDB()
 
 	r := gin.Default()
+
+	r.SetFuncMap(template.FuncMap{
+		"toLower": strings.ToLower,
+	})
 
 	routes.RegisterPublicRoutes(r)
 	routes.RegisterAPIRoutes(r)

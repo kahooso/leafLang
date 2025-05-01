@@ -15,7 +15,6 @@
     <div class="leaf-decoration leaf-2"></div>
     <div class="leaf-decoration leaf-3"></div>
 
-    <!-- Переносим кнопки вверх в новый контейнер -->
     <div class="top-navigation">
         <div class="logo">
             <i class="fas fa-leaf"></i> leafLang
@@ -23,8 +22,7 @@
         <div class="top-actions">
             <a href="/contact" class="secondary-button"><i class="fas fa-envelope"></i> Contact</a>
             <a href="/faq" class="secondary-button"><i class="fas fa-question-circle"></i> FAQ</a>
-            <a href="/settings" class="secondary-button"><i class="fas fa-cog"></i> Settings</a>
-            <!-- <a href="/logout" class="profile-link"><i class="fas fa-sign-out-alt"></i> Log Out</a> -->
+            <!-- <a href="/settings" class="secondary-button"><i class="fas fa-cog"></i> Settings</a> -->
         </div>
         <div class="profile-badge">
             <a href="/logout" class="logout-icon" title="Log Out">
@@ -98,11 +96,6 @@
         </a>
     </div>
 
-    <!-- <div class="daily-motivation">
-        <h3><i class="fas fa-quote-left"></i> Today's Language Tip</h3>
-        <p>"Learning 10 words a day means 3,650 words a year - enough to understand 85% of a language!"</p>
-    </div> -->
-
     <div class="modal" id="add-word-modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -133,26 +126,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Элементы модального окна
             const modal = document.getElementById('add-word-modal');
             const addWordBtn = document.querySelector('.add-words');
             const closeBtn = document.querySelector('.close-modal');
             const addWordForm = document.getElementById('add-word-form');
 
-            // Открытие модального окна
             addWordBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 modal.style.display = 'block';
                 document.body.style.overflow = 'hidden'; // Запрещаем прокрутку фона
             });
 
-            // Закрытие модального окна
             closeBtn.addEventListener('click', function () {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             });
 
-            // Закрытие при клике вне модального окна
             window.addEventListener('click', function (e) {
                 if (e.target === modal) {
                     modal.style.display = 'none';
@@ -160,7 +149,6 @@
                 }
             });
 
-            // Обработка отправки формы
             addWordForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
 

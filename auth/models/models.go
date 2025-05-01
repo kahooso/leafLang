@@ -63,7 +63,7 @@ type UserWord struct {
 	SuccessCount int        `gorm:"default:0"`
 	FailCount    int        `gorm:"default:0"`
 	LastReviewed time.Time
-	NextReviewAt time.Time `gorm:"inde"`
+	NextReviewAt time.Time `gorm:"index"`
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index"`

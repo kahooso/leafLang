@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"auth/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +10,6 @@ func RegisterPublicRoutes(r *gin.Engine) {
 	r.Static("/static", "./static")
 	r.LoadHTMLGlob("templates/*")
 
-	r.Use(middleware.ErrorMiddleware())
 	r.NoRoute(func(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	})

@@ -20,7 +20,7 @@ func AddWordHandler(c *gin.Context) {
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"error":   "Некорректные данные",
+			"error":   "Incorrect data",
 			"details": err.Error(),
 		})
 		return
@@ -33,21 +33,22 @@ func AddWordHandler(c *gin.Context) {
 		OriginalWord: input.OriginalWord,
 		Translation:  input.Translation,
 		Example:      input.Example,
-		StatusID:     1,                              // To learn
-		NextReviewAt: time.Now().Add(24 * time.Hour), // Первое повторение через 24 часа
+		StatusID:     1,
+		LastReviewed: time.Now(),
+		NextReviewAt: time.Now().Add(6 * time.Hour),
 	}
 
 	if err := database.DB.Create(&word).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
-			"error":   "Не удалось добавить слово",
+			"error":   "Error while saving word",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "Слово успешно добавлено",
+		"message": "Word has successfully added",
 		"word_id": word.ID,
 	})
 }
