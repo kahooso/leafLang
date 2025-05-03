@@ -18,16 +18,16 @@
                     <input type="text" id="search-input" placeholder="Search words...">
                     <button id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
-                <div><i class="fa fa-trash"></i></div>
+                <!-- <div><i class="fa fa-trash"></i></div> -->
                 <select id="status-filter">
                     <option value="">All Statuses</option>
                     <option value="To learn">To learn</option>
                     <option value="Known">Known</option>
                     <option value="Learned">Learned</option>
                 </select>
-                <a href="#" id="add-word-btn" class="button primary">
+                <!-- <a href="#" id="add-word-btn" class="button primary">
                     <i class="fas fa-plus"></i> Add Word
-                </a>
+                </a> -->
             </div>
         </header>
 
@@ -126,13 +126,13 @@
             </form>
         </div>
     </div>
-    <div id="trash-modal" class="modal">
+    <!-- <div id="trash-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h3><i class="fas fa-trash"></i> Deleted Words</h3>
             <div class="deleted-words-list"></div>
         </div>
-    </div>
+    </div> -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const statusFilter = document.getElementById('status-filter');
@@ -197,63 +197,63 @@
         statusFilter.value = "{{ .StatusFilter }}";
         searchInput.value = "{{ .SearchQuery }}";
 
-        trashIcon.addEventListener('click', function() {
-            fetchDeletedWords();
-            trashModal.style.display = 'block';
-        });
+        // trashIcon.addEventListener('click', function() {
+        //     fetchDeletedWords();
+        //     trashModal.style.display = 'block';
+        // });
 
-        function fetchDeletedWords() {
-            fetch('/words/deleted')
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        renderDeletedWords(data.words);
-                    } else {
-                        throw new Error(data.error || 'Failed to load deleted words');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    deletedWordsContainer.innerHTML = `<p class="error">Error loading deleted words: ${error.message}</p>`;
-                });
-        }
+        // function fetchDeletedWords() {
+        //     fetch('/words/deleted')
+        //         .then(response => {
+        //             if (!response.ok) throw new Error('Network response was not ok');
+        //             return response.json();
+        //         })
+        //         .then(data => {
+        //             if (data.success) {
+        //                 renderDeletedWords(data.words);
+        //             } else {
+        //                 throw new Error(data.error || 'Failed to load deleted words');
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //             deletedWordsContainer.innerHTML = `<p class="error">Error loading deleted words: ${error.message}</p>`;
+        //         });
+        // }
 
-        function renderDeletedWords(words) {
-            deletedWordsContainer.innerHTML = '';
+        // function renderDeletedWords(words) {
+        //     deletedWordsContainer.innerHTML = '';
 
-            if (words.length === 0) {
-                deletedWordsContainer.innerHTML = '<p class="no-items">No deleted words found</p>';
-                return;
-            }
+        //     if (words.length === 0) {
+        //         deletedWordsContainer.innerHTML = '<p class="no-items">No deleted words found</p>';
+        //         return;
+        //     }
 
-            words.forEach(word => {
-                const wordElement = document.createElement('div');
-                wordElement.className = 'deleted-word-item';
-                wordElement.innerHTML = `
-                    <div class="word-info">
-                        <strong>${escapeHtml(word.original_word)}</strong> - ${escapeHtml(word.translation)}
-                        ${word.example ? `<div class="example">${escapeHtml(word.example)}</div>` : ''}
-                        <div class="deleted-date">Deleted: ${new Date(word.deleted_at).toLocaleString()}</div>
-                    </div>
-                    <button class="restore-btn" data-id="${word.id}">
-                        <i class="fas fa-undo"></i> Restore
-                    </button>
-                `;
-                deletedWordsContainer.appendChild(wordElement);
-            });
+        //     words.forEach(word => {
+        //         const wordElement = document.createElement('div');
+        //         wordElement.className = 'deleted-word-item';
+        //         wordElement.innerHTML = `
+        //             <div class="word-info">
+        //                 <strong>${escapeHtml(word.original_word)}</strong> - ${escapeHtml(word.translation)}
+        //                 ${word.example ? `<div class="example">${escapeHtml(word.example)}</div>` : ''}
+        //                 <div class="deleted-date">Deleted: ${new Date(word.deleted_at).toLocaleString()}</div>
+        //             </div>
+        //             <button class="restore-btn" data-id="${word.id}">
+        //                 <i class="fas fa-undo"></i> Restore
+        //             </button>
+        //         `;
+        //         deletedWordsContainer.appendChild(wordElement);
+        //     });
 
-            document.querySelectorAll('.restore-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const wordId = this.getAttribute('data-id');
-                    if (confirm('Are you sure you want to restore this word?')) {
-                        restoreWord(wordId);
-                    }
-                });
-            });
-        }
+        //     document.querySelectorAll('.restore-btn').forEach(btn => {
+        //         btn.addEventListener('click', function() {
+        //             const wordId = this.getAttribute('data-id');
+        //             if (confirm('Are you sure you want to restore this word?')) {
+        //                 restoreWord(wordId);
+        //             }
+        //         });
+        //     });
+        // }
 
         function restoreWord(wordId) {
             fetch(`/words/restore/${wordId}`, { 
@@ -280,15 +280,15 @@
             });
         }
 
-        closeModalBtn.addEventListener('click', function() {
-            trashModal.style.display = 'none';
-        });
+        // closeModalBtn.addEventListener('click', function() {
+        //     trashModal.style.display = 'none';
+        // });
 
-        window.addEventListener('click', function(e) {
-            if (e.target === trashModal) {
-                trashModal.style.display = 'none';
-            }
-        });
+        // window.addEventListener('click', function(e) {
+        //     if (e.target === trashModal) {
+        //         trashModal.style.display = 'none';
+        //     }
+        // });
 
         function escapeHtml(unsafe) {
             return unsafe

@@ -28,5 +28,5 @@ func ConnectDB() {
 	}
 
 	DB = db
-	fmt.Println("✅ DB connected successfully!")
+	fmt.Println("DB connected successfully!")
 }
