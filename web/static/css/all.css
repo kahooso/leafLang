@@ -1,0 +1,64 @@
+/* Global Styles */
+:root {
+    --primary-color: #2e7d32;
+    --primary-light: #60ad5e;
+    --primary-dark: #005005;
+    --secondary-color: #8bc34a;
+    --accent-color: #689f38;
+    --text-light: #f1f8e9;
+    --text-dark: #1b5e20;
+    --background-light: #e8f5e9;
+    --background-dark: #c8e6c9;
+    --error-color: #d32f2f;
+    --success-color: #388e3c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    min-height: 100vh;
+    background-image: url('/static/images/leaf-pattern.png');
+    background-size: 300px;
+    background-attachment: fixed;
+    background-blend-mode: overlay;
+    opacity: 0.95;
+}
+
+/* Leaf-themed decorative elements */
+.leaf-decoration {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+/* .leaf-1 {
+    top: 10%;
+    left: 5%;
+    background-image: url('/static/images/leaf1.png');
+    transform: rotate(15deg);
+}
+
+.leaf-2 {
+    bottom: 15%;
+    right: 8%;
+    background-image: url('/static/images/leaf2.png');
+    transform: rotate(-20deg);
+}
+
+.leaf-3 {
+    top: 30%;
+    right: 10%;
+    background-image: url('/static/images/leaf3.png');
+    transform: rotate(40deg);
+} */
