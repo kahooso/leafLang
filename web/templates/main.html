@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>leafLang - Language Learning</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/favicon.png">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="main-page">
+    <div class="leaf-decoration leaf-1"></div>
+    <div class="leaf-decoration leaf-2"></div>
+    <div class="leaf-decoration leaf-3"></div>
+
+    <div class="top-navigation">
+        <div class="logo">
+            <i class="fas fa-leaf"></i> leafLang
+        </div>
+        <div class="top-actions">
+            <a href="/contact" class="secondary-button"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="/faq" class="secondary-button"><i class="fas fa-question-circle"></i> FAQ</a>
+            <!-- <a href="/settings" class="secondary-button"><i class="fas fa-cog"></i> Settings</a> -->
+        </div>
+        <div class="profile-badge">
+            <a href="/logout" class="logout-icon" title="Log Out">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+            <span class="profile-divider">|</span>
+            <a href="/profile" class="profile-link">
+                <i class="fas fa-user"></i> Profile
+                <span class="role-badge">{{ .role }}</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <div class="profile-header">
+            <div class="user-info">
+                <h2>Welcome back, <span class="username">{{.username}}</span>!</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-dashboard">
+        <div class="progress-card to-learn">
+            <i class="fas fa-seedling"></i>
+            <div class="progress-info">
+                <h3 class="count">To Learn: {{ .toLearnCount }}</h3>
+                <p>Ready for practice</p>
+            </div>
+        </div>
+
+        <div class="progress-card known">
+            <i class="fas fa-leaf"></i>
+            <div class="progress-info">
+                <h3 class="count">Known: {{ .knownCount }}</h3>
+                <p>In short-term memory</p>
+            </div>
+        </div>
+
+        <div class="progress-card learned">
+            <i class="fas fa-tree"></i>
+            <div class="progress-info">
+                <h3 class="count">Learned: {{ .learnedCount }}</h3>
+                <p>In long-term memory</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-actions">
+        <a href="/practice" class="action-card practice">
+            <i class="fas fa-book-open"></i>
+            <h3>Practice Now</h3>
+            <p>{{ .toLearnCount }} words ready for review</p>
+        </a>
+
+        <a href="/word/add" class="action-card add-words">
+            <i class="fas fa-plus-circle"></i>
+            <h3>Add New Words</h3>
+            <p>Expand your vocabulary</p>
+        </a>
+
+        <a href="/words" class="action-card word-list">
+            <i class="fas fa-list-ul"></i>
+            <h3>My Word List</h3>
+            <p>Manage your collection</p>
+        </a>
+
+        <a href="/statistics" class="action-card stats">
+            <i class="fas fa-chart-line"></i>
+            <h3>Statistics</h3>
+            <p>Track your progress</p>
+        </a>
+    </div>
+
+    <div class="modal" id="add-word-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3><i class="fas fa-plus-circle"></i> Добавить новое слово</h3>
+
+            <form id="add-word-form">
+                <div class="input-group">
+                    <i class="fas fa-language"></i>
+                    <input type="text" id="original-word" placeholder="Слово на иностранном языке" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-exchange-alt"></i>
+                    <input type="text" id="translation" placeholder="Перевод" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-comment-dots"></i>
+                    <textarea id="example" placeholder="Пример использования (необязательно)"></textarea>
+                </div>
+
+                <button type="submit" class="modal-button">
+                    <i class="fas fa-save"></i> Сохранить
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('add-word-modal');
+            const addWordBtn = document.querySelector('.add-words');
+            const closeBtn = document.querySelector('.close-modal');
+            const addWordForm = document.getElementById('add-word-form');
+
+            addWordBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Запрещаем прокрутку фона
+            });
+
+            closeBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            window.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            addWordForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const originalWord = document.getElementById('original-word').value;
+                const translation = document.getElementById('translation').value;
+                const example = document.getElementById('example').value;
+
+                try {
+                    const response = await fetch('/word/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            original_word: originalWord,
+                            translation: translation,
+                            example: example
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                        addWordForm.reset();
+
+                        showNotification('Word has successfully added!', 'success');
+                    } else {
+                        showNotification(result.error || 'Error while adding a word', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Server error', 'error');
+                    console.error('Error:', error);
+                }
+            });
+
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.classList.add('fade-out');
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
