@@ -1,0 +1,405 @@
+/* Word List Page */
+.word-list-page {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(139, 195, 74, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(139, 195, 74, 0.05) 0%, transparent 20%);
+}
+
+.word-list-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-primary-100);
+}
+
+.word-list-header h1 {
+    font-size: 2.2rem;
+    color: var(--color-primary-800);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.word-list-header h1 i {
+    color: var(--color-primary-600);
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 1px solid var(--color-primary-200);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    background-color: var(--color-surface);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.search-box button {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--color-primary-600);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-primary-200);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.word-list-container {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-primary-100);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+thead th {
+    text-align: left;
+    padding: 1rem;
+    background: var(--color-primary-50);
+    color: var(--color-primary-800);
+    font-weight: 600;
+    border-bottom: 2px solid var(--color-primary-200);
+}
+
+tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-primary-100);
+    vertical-align: middle;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--color-primary-50);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-badge.To\ learn {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.status-badge.Known {
+    background-color: #e8f5e9;
+    color: var(--color-primary-800);
+}
+
+.status-badge.Learned {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.edit-btn,
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-btn:hover {
+    background: var(--color-primary-100);
+    color: var(--color-primary-700);
+}
+
+.delete-btn:hover {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.no-words {
+    text-align: center;
+    padding: 3rem;
+}
+
+.no-words i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.no-words p {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.pagination button {
+    background: var(--color-primary-50);
+    border: 1px solid var(--color-primary-200);
+    color: var(--color-primary-700);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: var(--color-primary-100);
+    color: var(--color-primary-900);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#page-info {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: var(--color-surface);
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    border: 1px solid var(--color-primary-100);
+}
+
+.close-modal {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.close-modal:hover {
+    color: var(--color-primary-700);
+}
+
+.modal h3 {
+    color: var(--color-primary-800);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modal h3 i {
+    color: var(--color-primary-600);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary-700);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-primary-200);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    background-color: var(--color-surface);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.button.primary {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-dark));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-dark));
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .search-box {
+        max-width: 100%;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--color-primary-100);
+        border-radius: var(--radius-sm);
+        padding: 1rem;
+    }
+
+    tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-primary-50);
+    }
+
+    tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--color-primary-700);
+        margin-right: 1rem;
+    }
+
+    tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .actions {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .word-list-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .pagination {
+        gap: 1rem;
+    }
+
+    #page-info {
+        font-size: 0.9rem;
+    }
+}

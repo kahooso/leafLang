@@ -7,8 +7,8 @@ import (
 )
 
 func RegisterPublicRoutes(r *gin.Engine) {
-	r.Static("static", "../../web/static")
-	r.LoadHTMLGlob("../../web/templates/*")
+	r.Static("static", "../../static")
+	r.LoadHTMLGlob("../../templates/*")
 
 	r.NoRoute(func(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
