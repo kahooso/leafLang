@@ -56,13 +56,69 @@ func GetWordList(c *gin.Context) {
 	})
 }
 
+func UpdateWord(c *gin.Context) {
+	const op string = "handlers.word-list.UpdateWord"
+
+	user := c.MustGet("user").(context.UserContext)
+	wordID := c.Param("id")
+
+	var updateData struct {
+		OriginalWord string `json:"originalWord"`
+		Translation  string `json:"translation"`
+		Example      string `json:"example"`
+		StatusID     uint   `json:"status"`
+	}
+
+	if err := c.ShouldBindJSON(&updateData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		return
+	}
+
+	updates := map[string]interface{}{
+		"original_word": updateData.OriginalWord,
+		"translation":   updateData.Translation,
+		"example":       updateData.Example,
+		"status_id":     updateData.StatusID,
+	}
+
+	result := database.DB.Model(&models.UserWord{}).
+		Where("id = ? AND user_id = ?", wordID, user.ID).
+		Updates(updates)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update word",
+		})
+		return
+	}
+
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Word not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+	})
+}
+
 func DeleteWord(c *gin.Context) {
 	user := c.MustGet("user").(context.UserContext)
 	wordID := c.Param("id")
 
-	if err := database.DB.Where("id = ? AND user_id = ?", wordID, user.ID).Delete(&models.UserWord{}).Error; err != nil {
+	var result = database.DB.Where("id = ? AND user_id = ?", wordID, user.ID).Delete(&models.UserWord{})
+	if result.Error != nil {
 		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
 			"Error": "Failed to delete word",
+		})
+		return
+	}
+
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Word not found",
 		})
 		return
 	}
