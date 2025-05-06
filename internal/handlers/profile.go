@@ -85,7 +85,7 @@ func UpdateProfileHandler(c *gin.Context) {
 			return
 		}
 
-		imageDir := "./static/user-images"
+		imageDir := "../../static/user-images"
 		if err := os.MkdirAll(imageDir, 0755); err != nil {
 			log.Printf("%s: %s\n", op, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -102,13 +102,13 @@ func UpdateProfileHandler(c *gin.Context) {
 		}
 
 		if user.ImageUrl != "" {
-			oldImage := strings.TrimPrefix(user.ImageUrl, "/static/user-images/")
+			oldImage := strings.TrimPrefix(user.ImageUrl, "../../static/user-images/")
 			if err := os.Remove(filepath.Join(imageDir, oldImage)); err != nil {
 				log.Printf("%s: %s", op, err)
 			}
 		}
 
-		user.ImageUrl = "/static/user-images/" + filename
+		user.ImageUrl = "../../static/user-images/" + filename
 	}
 
 	if err := database.DB.Save(&user).Error; err != nil {

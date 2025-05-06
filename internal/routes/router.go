@@ -8,6 +8,8 @@ import (
 )
 
 func Set(r *gin.Engine) {
+	r.Static("static", "../../static")
+	r.LoadHTMLGlob("../../templates/*")
 
 	r.SetFuncMap(template.FuncMap{
 		"toLower": strings.ToLower,
