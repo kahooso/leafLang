@@ -22,6 +22,10 @@ func RegisterProtectedRoutes(r *gin.Engine) {
 		protected.DELETE("/words/:id", handlers.DeleteWord)
 		protected.POST("/words/:id", handlers.UpdateWord)
 
+		protected.GET("/practice", handlers.PracticePageHandler)
+		protected.GET("/api/practice/words", handlers.GetPracticeWordHandler)
+		protected.POST("/api/practice/results", handlers.SubmitPracticeResultHandler)
+
 		// admin
 		// protected.GET("/UserList", handlers.UserListHandler)
 	}

@@ -57,8 +57,6 @@ func GetWordList(c *gin.Context) {
 }
 
 func UpdateWord(c *gin.Context) {
-	const op string = "handlers.word-list.UpdateWord"
-
 	user := c.MustGet("user").(context.UserContext)
 	wordID := c.Param("id")
 

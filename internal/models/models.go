@@ -8,7 +8,7 @@ import (
 
 const (
 	StatusToLearn = 1
-	StatusToKnow  = 2
+	StatusKnown   = 2
 	StatusLearned = 3
 )
 
