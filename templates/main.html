@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/all.css">
-    <link rel="icon" type="image/png" href="/static/images/logo.jpg">
+    <link rel="icon" type="image/png" href="/static/images/logo.ico">
     <title>leafLang - Language Learning</title>
 </head>
 
@@ -97,26 +97,26 @@
     <div class="modal" id="add-word-modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h3><i class="fas fa-plus-circle"></i> Добавить новое слово</h3>
+            <h3><i class="fas fa-plus-circle"></i> Add new word</h3>
 
             <form id="add-word-form">
                 <div class="input-group">
                     <i class="fas fa-language"></i>
-                    <input type="text" id="original-word" placeholder="Слово на иностранном языке" required>
+                    <input type="text" id="original-word" placeholder="Foreign word" required>
                 </div>
 
                 <div class="input-group">
                     <i class="fas fa-exchange-alt"></i>
-                    <input type="text" id="translation" placeholder="Перевод" required>
+                    <input type="text" id="translation" placeholder="Translation" required>
                 </div>
 
                 <div class="input-group">
                     <i class="fas fa-comment-dots"></i>
-                    <textarea id="example" placeholder="Пример использования (необязательно)"></textarea>
+                    <textarea id="example" placeholder="Example of using (not quired)"></textarea>
                 </div>
 
                 <button type="submit" class="modal-button">
-                    <i class="fas fa-save"></i> Сохранить
+                    <i class="fas fa-save"></i> Save
                 </button>
             </form>
         </div>
@@ -132,7 +132,7 @@
             addWordBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 modal.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Запрещаем прокрутку фона
+                document.body.style.overflow = 'hidden'; 
             });
 
             closeBtn.addEventListener('click', function () {

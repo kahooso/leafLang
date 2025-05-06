@@ -15,7 +15,6 @@
     --error: #d32f2f;
 }
 
-/* Base Styles */
 html,
 body {
     height: 100%;
@@ -23,7 +22,6 @@ body {
     padding: 0;
 }
 
-/* Auth Page Container */
 .auth-page {
     display: flex;
     justify-content: center;
@@ -37,14 +35,12 @@ body {
     position: relative;
 }
 
-/* Specific styles for signup page */
 .signup-page {
     align-items: flex-start;
     padding-top: 1rem;
     padding-bottom: 2rem;
 }
 
-/* Auth Container */
 .auth-container {
     background: var(--card-bg);
     border-radius: 20px;
@@ -60,7 +56,6 @@ body {
     z-index: 2;
 }
 
-/* Specific styles for signup container */
 .signup-page .auth-container {
     padding: 2.5rem;
     margin: 1rem auto;
@@ -78,7 +73,6 @@ body {
     background: linear-gradient(90deg, var(--primary), var(--accent));
 }
 
-/* Auth Header */
 .auth-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -106,14 +100,12 @@ body {
     margin: 0 auto;
 }
 
-/* Auth Form */
 .auth-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-/* Compact form for signup */
 .signup-form {
     gap: 1.2rem;
 }
@@ -154,7 +146,6 @@ body {
     color: var(--primary);
 }
 
-/* Auth Button */
 .auth-button {
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: white;
@@ -196,7 +187,6 @@ body {
     transform: translateX(0);
 }
 
-/* Auth Footer */
 .auth-footer {
     margin-top: 2rem;
     text-align: center;
@@ -223,7 +213,6 @@ body {
     text-decoration: underline;
 }
 
-/* Messages */
 #SignInMsg,
 #SignUpMsg {
     margin-top: 1.5rem;
@@ -245,7 +234,6 @@ body {
     color: var(--error);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .auth-container {
         padding: 2.5rem;

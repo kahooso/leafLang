@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/auth.css">
     <link rel="stylesheet" href="/static/css/all.css">
-    <link rel="icon" type="image/png" href="/static/images/logo.jpg">
+    <link rel="icon" type="image/png" href="/static/images/logo.ico">
     <title>Sign In | leafLang</title>
 </head>
 
@@ -64,13 +64,13 @@
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("role", data.role);
 
-                        message.style.color = "var(--success-color)";
+                        message.style.color = "var(--success)";
                         message.textContent = "Login successful! Redirecting...";
                         setTimeout(() => {
                             window.location.href = "/main";
                         }, 1500);
                     } else {
-                        message.style.color = "var(--error-color)";
+                        message.style.color = "var(--error)";
                         message.textContent = data.error || "Invalid email or password!";
                     }
                 });

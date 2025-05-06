@@ -482,7 +482,6 @@
     }
 }
 
-/* Responsive Design */
 @media (max-width: 992px) {
     .top-navigation {
         flex-direction: column;

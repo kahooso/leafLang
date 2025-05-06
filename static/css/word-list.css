@@ -343,7 +343,6 @@ tbody tr:hover {
     background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-dark));
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .controls {
         flex-direction: column;

@@ -55,10 +55,10 @@ body {
     color: var(--color-text-primary);
     background-color: var(--color-background);
     min-height: 100vh;
-    background-image:
+    /* background-image:
         url('/static/images/leaf-pattern.png'),
         radial-gradient(circle at 10% 20%, rgba(139, 195, 74, 0.05) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(139, 195, 74, 0.05) 0%, transparent 20%);
+        radial-gradient(circle at 90% 80%, rgba(139, 195, 74, 0.05) 0%, transparent 20%); */
     background-size:
         300px,
         auto,
