@@ -61,10 +61,10 @@ func UpdateWord(c *gin.Context) {
 	wordID := c.Param("id")
 
 	var updateData struct {
-		OriginalWord string `json:"originalWord"`
+		OriginalWord string `json:"original_word"`
 		Translation  string `json:"translation"`
 		Example      string `json:"example"`
-		StatusID     uint   `json:"status"`
+		StatusID     uint   `json:"status_id"`
 	}
 
 	if err := c.ShouldBindJSON(&updateData); err != nil {
@@ -72,7 +72,7 @@ func UpdateWord(c *gin.Context) {
 		return
 	}
 
-	updates := map[string]interface{}{
+	updates := map[string]any{
 		"original_word": updateData.OriginalWord,
 		"translation":   updateData.Translation,
 		"example":       updateData.Example,
