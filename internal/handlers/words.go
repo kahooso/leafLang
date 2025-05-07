@@ -35,7 +35,7 @@ func AddWordHandler(c *gin.Context) {
 		Example:      input.Example,
 		StatusID:     1,
 		LastReviewed: time.Now(),
-		NextReviewAt: time.Now().Add(6 * time.Hour),
+		NextReviewAt: time.Now(),
 	}
 
 	if err := database.DB.Create(&word).Error; err != nil {
