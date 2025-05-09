@@ -2,8 +2,8 @@ package database
 
 import (
 	"fmt"
+	"leaflang/internal/config"
 	"log"
-	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,23 +11,15 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDB() {
-	const op string = "database.ConnectDB"
-
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
-
+func ConnectDB(cfg *config.Config) {
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
+		cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPass, cfg.DBName)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("%s: %s\n", op, err)
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	DB = db
-	fmt.Println("Database connected successfully!")
+	log.Println("Database connected successfully")
 }

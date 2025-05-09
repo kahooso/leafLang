@@ -25,7 +25,11 @@ type RegisterRequest struct {
 	Password  string `json:"password" binding:"required,min=6"`
 }
 
-var JwtSecret = []byte("clappy")
+var jwtSecret []byte
+
+func InitAuthHandlers(secret string) {
+	jwtSecret = []byte(secret)
+}
 
 func generateJWT(user models.User) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
@@ -36,7 +40,7 @@ func generateJWT(user models.User) (string, error) {
 		"exp":     expirationTime.Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(JwtSecret)
+	return token.SignedString(jwtSecret)
 }
 
 func RegisterHandler(c *gin.Context) {

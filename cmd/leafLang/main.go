@@ -1,34 +1,31 @@
 package main
 
 import (
-	"fmt"
+	"leaflang/internal/config"
 	"leaflang/internal/database"
+	"leaflang/internal/handlers"
 	"leaflang/internal/routes"
+	"leaflang/pkg/middleware"
 	"log"
-	"os"
-	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
+	cfg := config.Load()
+
 	gin.SetMode(gin.ReleaseMode)
-	if err := godotenv.Load(filepath.Join("../../", ".env")); err != nil {
-		log.Println("File .env is not found")
-	}
-	database.ConnectDB()
+
+	database.ConnectDB(cfg)
+
+	handlers.InitAuthHandlers(cfg.JWTSecret)
+	middleware.SetJWTSecret(cfg.JWTSecret)
 
 	r := gin.Default()
 	routes.Set(r)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	fmt.Println("Server is working on http://localhost:" + port)
-	if err := r.Run("localhost:" + port); err != nil {
-		log.Fatal("Error while starting server:", err)
+	log.Printf("Server is running on http://localhost:%s", cfg.Port)
+	if err := r.Run(":" + cfg.Port); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
 	}
 }
