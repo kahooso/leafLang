@@ -1,0 +1,203 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const practiceContent = document.getElementById('practice-content');
+    const noWordsMessage = document.getElementById('no-words-message');
+    const checkBtn = document.getElementById('check-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    let currentWordIndex = 0;
+    let words = [];
+    let userAnswers = {};
+
+    fetchPracticeWords();
+
+    checkBtn.addEventListener('click', checkAnswer);
+    nextBtn.addEventListener('click', showNextWord);
+
+    function fetchPracticeWords() {
+        fetch('/api/practice/words')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('API resonse:', data)
+                if (data.success && data.words && data.words.length > 0) {
+                    words = data.words;
+                    userAnswers = {};
+                    currentWordIndex = 0;
+                    showWord(currentWordIndex);
+                    updateProgress();
+                    noWordsMessage.style.display = 'none';
+                    practiceContent.style.display = 'block';
+                } else {
+                    noWordsMessage.style.display = 'block';
+                    practiceContent.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                noWordsMessage.style.display = 'block';
+                practiceContent.style.display = 'none';
+            });
+    }
+
+    function showWord(index) {
+        if (index >= words.length) {
+            submitResults();
+            return;
+        }
+
+        const word = words[index];
+        let questionHtml = '';
+
+        switch (word.question_type) {
+            case 'original_to_translation':
+                questionHtml = `
+                    <div class="question-card">
+                        <h2><i class="fas fa-language"></i> Translate this word</h2>
+                        <div class="question-text">${word.question}</div>
+                        <input type="text" class="answer-input" placeholder="Your translation..." autocomplete="off">
+                        <div class="answer-feedback"></div>
+                    </div>
+                `;
+                break;
+
+            case 'translation_to_original':
+                questionHtml = `
+                    <div class="question-card">
+                        <h2><i class="fas fa-exchange-alt"></i> What is the original word?</h2>
+                        <div class="question-text">${word.question}</div>
+                        <input type="text" class="answer-input" placeholder="Original word..." autocomplete="off">
+                        <div class="answer-feedback"></div>
+                    </div>
+                `;
+                break;
+
+            case 'fill_in_gap':
+                questionHtml = `
+                    <div class="question-card">
+                        <h2><i class="fas fa-pencil-alt"></i> Fill in the gap</h2>
+                        <div class="gap-fill">${word.question}</div>
+                        <input type="text" class="answer-input" placeholder="Missing word..." autocomplete="off">
+                        <div class="answer-feedback"></div>
+                    </div>
+                `;
+                break;
+        }
+
+        practiceContent.innerHTML = questionHtml;
+        checkBtn.disabled = false;
+        nextBtn.disabled = true;
+        nextBtn.style.display = 'none';
+
+        const input = practiceContent.querySelector('.answer-input');
+        if (input) {
+            input.focus();
+            input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        }
+    }
+
+    function checkAnswer() {
+        const input = practiceContent.querySelector('.answer-input');
+        if (!input) return;
+
+        const currentWord = words[currentWordIndex]
+        if (!currentWord) {
+            console.error('No current word available.');
+            return;
+        }
+
+        let correctAnswer;
+        switch (currentWord.question_type) {
+            case 'original_to_translation':
+                correctAnswer = currentWord.translation;
+                break;
+            case 'fill_in_gap':
+            case 'translation_to_original':
+                correctAnswer = currentWord.original_word;
+                break;
+            default:
+                console.error('Unknown question type:', currentWord.question_type);
+                return;
+        }
+
+        if (!correctAnswer) {
+            console.error('Correct answer not found for word:', currentWord);
+            return;
+        }
+
+        const userAnswer = input.value.trim();
+        const isCorrect = currentWord.answer && userAnswer.toLowerCase() === currentWord.answer.toLowerCase();
+
+        userAnswers[currentWord.id] = isCorrect;
+
+        const feedback = practiceContent.querySelector('.answer-feedback');
+        if (feedback) {
+            feedback.style.display = 'block';
+            feedback.textContent = isCorrect
+                ? `✓ Correct! The answer is: ${currentWord.answer}`
+                : `✗ Incorrect. The correct answer is: ${currentWord.answer}`;
+            feedback.className = isCorrect ? 'answer-feedback correct' : 'answer-feedback incorrect';
+        }
+
+        input.disabled = true;
+        checkBtn.disabled = true;
+        nextBtn.disabled = false;
+        nextBtn.style.display = 'block';
+        nextBtn.focus();
+    }
+
+    function showNextWord() {
+        currentWordIndex++;
+        updateProgress();
+        showWord(currentWordIndex);
+    }
+
+    function updateProgress() {
+        const progress = ((currentWordIndex) / words.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `${currentWordIndex}/${words.length}`;
+    }
+
+    function submitResults() {
+        const answers = Object.keys(userAnswers).map(wordId => ({
+            word_id: parseInt(wordId),
+            success: userAnswers[wordId]
+        }));
+
+        fetch('/api/practice/results', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ answers })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    practiceContent.innerHTML = `
+                    <div class="question-card text-center">
+                        <h2><i class="fas fa-check-circle"></i> Practice Completed!</h2>
+                        <div class="question-text">
+                            You've practiced ${words.length} words.
+                        </div>
+                        <button onclick="location.reload()" class="btn-primary mt-3">
+                            <i class="fas fa-redo"></i> Practice Again
+                        </button>
+                    </div>
+                `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+});
