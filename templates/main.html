@@ -29,7 +29,9 @@
             <span class="profile-divider">|</span>
             <a href="/profile" class="profile-link">
                 <i class="fas fa-user"></i> Profile
+                {{if .role}}
                 <span class="role-badge">{{ .role }}</span>
+                {{end}}
             </a>
         </div>
     </div>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/all.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/statistics.css">
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <title>Statistics - leafLang</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="statistics-page">
+    <div class="top-navigation">
+        <a href="/main" class="logo">
+            <i class="fas fa-leaf"></i> leafLang
+        </a>
+        <div class="top-actions">
+            <a href="/main" class="secondary-button">
+                <i class="fas fa-home"></i> Main
+            </a>
+            <a href="/practice" class="secondary-button">
+                <i class="fas fa-brain"></i> Practice
+            </a>
+        </div>
+        <div class="profile-badge">
+            <a href="/logout" class="logout-icon" title="Log Out">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+            <span class="profile-divider">|</span>
+            <a href="/profile" class="profile-link">
+                <i class="fas fa-user"></i> {{.User.Email}}
+                {{if .User.Role}}
+                <span class="role-badge">{{.User.Role}}</span>
+                {{end}}
+            </a>
+        </div>
+    </div>
+
+    <div class="statistics-container">
+        <div class="stats-header">
+            <h1><i class="fas fa-chart-line"></i> Learning Statistics</h1>
+            <p class="stats-subtitle">Track your progress and achievements</p>
+        </div>
+
+        <div class="stats-summary">
+            <div class="stat-card total-words">
+                <div class="stat-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Words</h3>
+                    <p class="stat-value" id="total-words">{{.TotalWords}}</p> <!-- Добавлен id -->
+                </div>
+            </div>
+
+            <div class="stat-card success-rate">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Success Rate</h3>
+                    <p class="stat-value" id="success-rate">{{.SuccessRate}}%</p> <!-- Добавлен id -->
+                </div>
+            </div>
+
+            <div class="stat-card weekly-activity">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-week"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Weekly Sessions</h3>
+                    <p class="stat-value" id="sessions-week">{{.SessionsWeek}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="activity-chart">
+                <h2><i class="fas fa-calendar-alt"></i> 7-Day Activity</h2>
+                <canvas id="activityChart"></canvas>
+            </div>
+            <div class="progress-details">
+                <div class="progress-item learned">
+                    <div class="progress-label">
+                        <i class="fas fa-tree"></i>
+                        <span>Learned</span>
+                    </div>
+                    <div class="progress-count" id="learned-words">{{.LearnedWords}}</div>
+                </div>
+                <div class="progress-item known">
+                    <div class="progress-label">
+                        <i class="fas fa-leaf"></i>
+                        <span>Known</span>
+                    </div>
+                    <div class="progress-count" id="known-words">{{.KnownWords}}</div>
+                </div>
+                <div class="progress-item to-learn">
+                    <div class="progress-label">
+                        <i class="fas fa-seedling"></i>
+                        <span>To Learn</span>
+                    </div>
+                    <div class="progress-count" id="to-learn-words">{{.ToLearnWords}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-section">
+
+            <div class="progress-chart">
+                <h2><i class="fas fa-spa"></i> Word Status Distribution</h2>
+                <canvas id="wordStatusChart"></canvas>
+            </div>
+
+            <div class="activity-stats">
+                <div class="activity-stat">
+                    <h3>Last Practice</h3>
+                    <p id="last-practice">{{.LastPractice}}</p> <!-- Добавлен id -->
+                </div>
+                <div class="activity-stat">
+                    <h3>Registered Since</h3>
+                    <p id="registration-date">{{.RegistrationDate}}</p> <!-- Добавлен id -->
+                </div>
+                <div class="activity-stat">
+                    <h3>Words This Week</h3>
+                    <p id="words-week">{{.WordsWeek}}</p> <!-- Добавлен id -->
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-words">
+            <h2><i class="fas fa-clock-rotate-left"></i> Recently Practiced Words</h2>
+            <div class="words-list">
+                {{range .RecentWords}}
+                <div class="word-item {{.Status}}">
+                    <div class="word-text">
+                        <strong>{{.Word}}</strong>
+                        <span>{{.Translation}}</span>
+                    </div>
+                    <div class="word-status">
+                        {{if eq .Status "Learned"}}
+                        <i class="fas fa-check-circle"></i>
+                        {{else if eq .Status "Known"}}
+                        <i class="fas fa-leaf"></i>
+                        {{else}}
+                        <i class="fas fa-seedling"></i>
+                        {{end}}
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/scripts/statistics.js"></script>
+</body>
+
+</html>
