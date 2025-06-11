@@ -18,11 +18,8 @@
 .env.local
 .env.*.local
 
-*.sql
 *.dump
 *.bak
-_sqlbackup.sql
-/db/migrations/*.down.sql
 
 *.log
 *.tmp
