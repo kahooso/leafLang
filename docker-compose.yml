@@ -1,0 +1,34 @@
+services:
+  app:
+    build: .
+    container_name: leaflang-app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=leaflang_db
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    command: ["./leaflang"]
+
+  db:
+    image: postgres:15
+    container_name: leaflang-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: leaflang_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./_sqlbackup.sql:/docker-entrypoint-initdb.d/_sqlbackup.sql
+
+volumes:
+  pgdata:
