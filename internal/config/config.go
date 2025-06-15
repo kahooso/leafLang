@@ -16,10 +16,11 @@ type Config struct {
 	DBPass    string
 	DBName    string
 	Port      string
+	IP        string
 }
 
 func Load() *Config {
-	envPath := filepath.Join("..", "..", ".env")
+	envPath := filepath.Join(".env")
 	if err := godotenv.Load(envPath); err != nil {
 		log.Println("Note: .env file not found, using system environment variables")
 	}
@@ -32,6 +33,7 @@ func Load() *Config {
 		DBPass:    getEnv("DB_PASSWORD", ""),
 		DBName:    getEnv("DB_NAME", ""),
 		Port:      getEnv("PORT", "8080"),
+		IP:        getEnv("IP", "localhost"),
 	}
 }
 

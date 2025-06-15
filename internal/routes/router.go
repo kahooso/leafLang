@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -8,8 +10,13 @@ import (
 )
 
 func Set(r *gin.Engine) {
-	r.Static("static", "../../static")
-	r.LoadHTMLGlob("../../templates/*")
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	r.Static("/static", filepath.Join(cwd, "static"))
+	r.LoadHTMLGlob(filepath.Join(cwd, "templates", "*"))
 
 	r.SetFuncMap(template.FuncMap{
 		"toLower": strings.ToLower,

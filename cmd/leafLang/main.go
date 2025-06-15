@@ -24,8 +24,8 @@ func main() {
 	r := gin.Default()
 	routes.Set(r)
 
-	log.Printf("Server is running on http://localhost:%s", cfg.Port)
-	if err := r.Run(":" + cfg.Port); err != nil {
+	log.Printf("Server is running on http://%s:%s", cfg.IP, cfg.Port)
+	if err := r.Run(cfg.IP + ":" + cfg.Port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
