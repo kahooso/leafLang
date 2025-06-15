@@ -5,20 +5,20 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - JWT_SECRET=clappy
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=leaflang_db
+      - IP=0.0.0.0
     depends_on:
       - db
-    volumes:
-      - ./:/app
     command: ["./leaflang"]
 
   db:
     image: postgres:15
-    container_name: leaflang-db
+    container_name: leaflang_db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -28,7 +28,6 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./_sqlbackup.sql:/docker-entrypoint-initdb.d/_sqlbackup.sql
-
+      - ./sqlbackup.sql:/docker-entrypoint-initdb.d/sqlbackup.sql
 volumes:
   pgdata:

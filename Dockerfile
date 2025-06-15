@@ -1,22 +1,25 @@
 FROM golang:1.24-alpine AS builder
 
-WORKDIR /
+WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
 
-RUN go build -o leaflang ./cmd/leaflang
+RUN go build -o leaflang ./cmd/leafLang
 
 FROM alpine:latest
 
-WORKDIR /
+WORKDIR /app
 
-COPY --from=builder /leaflang /leaflang
-COPY --from=builder /internal /internal
-COPY --from=builder /pkg /pkg
+COPY --from=builder /app/leaflang .
+
+COPY --from=builder /app/templates ./templates
+COPY --from=builder /app/static ./static
+COPY --from=builder /app/internal ./internal
+COPY --from=builder /app/pkg ./pkg
 
 EXPOSE 8080
 
-CMD ["/leaflang"]
+CMD ["./leaflang"]
