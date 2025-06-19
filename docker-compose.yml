@@ -15,6 +15,9 @@ services:
     depends_on:
       - db
     command: ["./leaflang"]
+    volumes:
+      - ./static/user-images:/app/static/user-images
+
 
   db:
     image: postgres:15

@@ -25,7 +25,7 @@ func main() {
 	routes.Set(r)
 
 	log.Printf("Server is running on http://%s:%s", cfg.IP, cfg.Port)
-	if err := r.Run(cfg.IP + ":" + cfg.Port); err != nil {
+	if err := r.Run("0.0.0.0" + ":" + cfg.Port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
